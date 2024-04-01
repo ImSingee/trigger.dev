@@ -45,7 +45,7 @@ import {
   WebhookSourceRequestHeadersSchema,
 } from "@trigger.dev/core";
 import { LogLevel, Logger } from "@trigger.dev/core-backend";
-import EventEmitter from "node:events";
+import EventEmitter from "events";
 import * as packageJson from "../package.json";
 import { ApiClient } from "./apiClient";
 import { ConcurrencyLimit, ConcurrencyLimitOptions } from "./concurrencyLimit";
