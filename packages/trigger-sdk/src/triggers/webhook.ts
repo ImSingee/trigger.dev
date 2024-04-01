@@ -20,7 +20,7 @@ import type {
 import { slugifyId } from "../utils";
 import { SerializableJson } from "@trigger.dev/core";
 import { Prettify } from "@trigger.dev/core";
-import { createHash } from "node:crypto";
+import { sha1 } from 'js-sha1';
 
 type WebhookCRUDContext<TParams extends any, TConfig extends Record<string, string[]>> = {
   active: boolean;
@@ -213,8 +213,7 @@ export class WebhookSource<
   }
 
   #shortHash(str: string) {
-    const hash = createHash("sha1").update(str).digest("hex");
-    return hash.slice(0, 7);
+    return sha1(str).slice(0, 7);
   }
 
   key(params: TParams): string {

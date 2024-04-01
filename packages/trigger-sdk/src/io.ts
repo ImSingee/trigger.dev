@@ -22,7 +22,6 @@ import {
 import { LogLevel, Logger } from "@trigger.dev/core-backend";
 import { BloomFilter } from "@trigger.dev/core-backend";
 import { AsyncLocalStorage } from "node:async_hooks";
-import { webcrypto } from "node:crypto";
 import { ApiClient } from "./apiClient";
 import {
   AutoYieldExecutionError,
@@ -1502,7 +1501,7 @@ async function generateIdempotencyKey(keyMaterial: any[]) {
 
   const key = keys.join(":");
 
-  const hash = await webcrypto.subtle.digest("SHA-256", Buffer.from(key));
+  const hash = await crypto.subtle.digest("SHA-256", Buffer.from(key));
 
   return Buffer.from(hash).toString("hex");
 }

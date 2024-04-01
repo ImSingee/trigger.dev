@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import type { BinaryToTextEncoding, BinaryLike, KeyObject } from "crypto";
 import { VerifyResult } from "./types";
 
@@ -37,7 +36,7 @@ export async function verifyRequestSignature({
 
   switch (algorithm) {
     case "sha256":
-      const success = verifyHmacSha256(headerValue, headerEncoding, secret, await request.text());
+      const success = await verifyHmacSha256(headerValue, headerEncoding, secret, await request.text());
 
       if (success) {
         return {
@@ -51,14 +50,37 @@ export async function verifyRequestSignature({
   }
 }
 
-export function verifyHmacSha256(
+export async function verifyHmacSha256(
   headerValue: string,
   headerEncoding: BinaryToTextEncoding,
   secret: BinaryLike | KeyObject,
   body: string
-): boolean {
-  const bodyDigest = crypto.createHmac("sha256", secret).update(body).digest(headerEncoding);
+): Promise<boolean> {
+  const bodyDigest = await createHmac(secret, body, headerEncoding);
   const signature = headerValue?.replace("hmac-sha256=", "").replace("sha256=", "") ?? "";
 
   return signature === bodyDigest;
+}
+
+async function createHmac(secret: BinaryLike | KeyObject, data: string, headerEncoding: BinaryToTextEncoding) {
+  if (typeof secret !== 'string') {
+    throw new Error('secret must be a string now');
+  }
+
+  let key = await crypto.subtle.importKey(
+    'raw',
+    Buffer.from(secret),
+    { name: 'HMAC', hash: 'SHA-256' }, // 这里假定使用SHA-256，你可以根据需要更改
+    false,
+    ['sign']
+  );
+
+  // 对数据进行HMAC操作
+  let signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    Buffer.from(data)
+  );
+
+  return Buffer.from(signature).toString(headerEncoding);
 }
