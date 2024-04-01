@@ -8,10 +8,11 @@
  * - `"info"`: Info, Warnings, Errors and essential messages.
  * - `"debug"`: Everything.
  */
-import { env } from "node:process";
 import { Buffer } from "node:buffer";
 
 export type LogLevel = "log" | "error" | "warn" | "info" | "debug";
+
+const env = process.env;
 
 const logLevels: Array<LogLevel> = ["log", "error", "warn", "info", "debug"];
 

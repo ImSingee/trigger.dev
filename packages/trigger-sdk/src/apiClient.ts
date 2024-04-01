@@ -40,10 +40,11 @@ import {
   urlWithSearchParams,
 } from "@trigger.dev/core";
 import { LogLevel, Logger } from "@trigger.dev/core-backend";
-import { env } from "node:process";
 
 import { z } from "zod";
 import { KeyValueStoreClient } from "./store/keyValueStoreClient";
+
+const env = process.env;
 
 export type ApiClientOptions = {
   apiKey?: string;

@@ -46,7 +46,6 @@ import {
 } from "@trigger.dev/core";
 import { LogLevel, Logger } from "@trigger.dev/core-backend";
 import EventEmitter from "node:events";
-import { env } from "node:process";
 import * as packageJson from "../package.json";
 import { ApiClient } from "./apiClient";
 import { ConcurrencyLimit, ConcurrencyLimitOptions } from "./concurrencyLimit";
@@ -82,6 +81,8 @@ import {
   type VerifyResult,
 } from "./types";
 import { formatSchemaErrors } from "./utils/formatSchemaErrors";
+
+const env = process.env;
 
 const parseRequestPayload = (rawPayload: any) => {
   const result = RequestWithRawBodySchema.safeParse(rawPayload);
